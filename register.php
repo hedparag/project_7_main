@@ -16,7 +16,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
     $empmail = pg_escape_string($conn, stripslashes($_POST['empmail']));
     $empphn = pg_escape_string($conn, stripslashes($_POST['empphn']));
     $date = pg_escape_string($conn, stripslashes($_POST['date']));
-    $details = pg_escape_string($conn, stripslashes($_POST['empdetails']));
+    $details = pg_escape_string($conn, stripslashes($_POST['details']));
     $skills = pg_escape_string($conn, stripslashes($_POST['skills']));
 
     if (empty($userTypeId)) {
@@ -78,16 +78,14 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
     if (!$is_error) {
         $query = "INSERT INTO employees(
             user_type_id, department_id, position_id, employee_name, employee_email, 
-            employee_phone, employee_details, employee_skils, dob, created_at, updated_at, profile_image
-        ) VALUES (
-            '$userTypeId', '$deptId', '$posId', '$empname', '$empmail', '$empphn', 
-            '$details', '$skills', '$date', NOW(), NOW(), $1 );";
+            employee_phone, employee_details, employee_skils, dob, created_at, updated_at, profile_image) VALUES ('$userTypeId', '$deptId', '$posId', '$empname', '$empmail', '$empphn', '$details', '$skills', '$date', NOW(), NOW(), $1 );";
         
         $result = @pg_query_params($conn, $query, [$imageEscaped]);
 
         if ($result) {
             $toastMessage = "Registration Successful!";
             $toastType = "success";
+            $_POST = array();
         } else {
             $errorMessage = pg_last_error($conn);
             $toastMessage = "Error: " . addslashes($errorMessage);
@@ -124,7 +122,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Register") {
                 <select class="form-select" name="userTypeId" required>
                     <option value="">-- Select user type --</option>
                     <?php
-                    $query2 = "SELECT * FROM user_types WHERE status = 't'";
+                    $query2 = "SELECT * FROM user_types;";
                     $user_types = pg_query($conn, $query2);
                     $selectedUserType = isset($_POST['userTypeId']) ? $_POST['userTypeId'] : '';
                     while ($key = pg_fetch_assoc($user_types)) {
