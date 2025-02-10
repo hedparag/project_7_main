@@ -29,7 +29,7 @@ if (!$result) {
     <h1 class="text-center mb-3 text-light">Welcome Admin <?= $_SESSION['user_full_name'] ?></h1>
     <h2 class="text-center mb-3 text-light">Employees to approve</h2>
     <div class="text-end mb-3">
-        <a href="register.php" class="btn btn-success">+ Add New Employee</a>
+        <a href="admin_add_employee.php" class="btn btn-success">+ Add New Employee</a>
     </div>
     <table class="table table-bordered bg-white shadow-sm text-center">
         <thead class="table-dark">
