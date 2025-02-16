@@ -20,8 +20,8 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Add") {
     $date = pg_escape_string($conn, stripslashes($_POST['date']));
     $details = pg_escape_string($conn, stripslashes($_POST['details']));
     $skills = pg_escape_string($conn, stripslashes($_POST['skills']));
-    $salary = pg_escape_string($conn, stripslashes($_POST['password']));
-    $password = pg_escape_string($conn, stripslashes($_POST['salary']));
+    $salary = pg_escape_string($conn, stripslashes($_POST['salary']));
+    $password = pg_escape_string($conn, stripslashes($_POST['password']));
 
     if (empty($userTypeId)) {
         $user_error = "User Type is required***";
@@ -90,8 +90,15 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Add") {
     }
 
     if (!$is_error) {
-        $query1 = "INSERT INTO employees(user_type_id, department_id, position_id, employee_name, employee_email, employee_phone, salary, employee_details, employee_skils, dob, created_at, updated_at, status, profile_image) VALUES('$userTypeId', '$deptId', '$posId', '$empname', '$empmail', '$empphn', '$salary', '$details', '$skills', '$date', NOW(), NOW(), 't', '$imageEscaped');";
-        $result1 = pg_query($conn, $query1);
+        $query1 = "INSERT INTO employees(user_type_id, department_id, position_id, employee_name, 
+            employee_email, employee_phone, salary, employee_details, employee_skils, dob, 
+            created_at, updated_at, status, profile_image) 
+           VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), NOW(), 't', $11)";
+        $params = [$userTypeId, $deptId, $posId, $empname, $empmail, $empphn, $salary, $details, $skills, $date, $imageEscaped];
+        $result1 = pg_query_params($conn, $query1, $params);
+        if (!$result1) {
+            die("Error inserting employee: " . pg_last_error($conn));
+        }
         $query2 = "SELECT * FROM employees WHERE employee_email = '$empmail';";
         $result2 = pg_query($conn, $query2);
         $row = pg_fetch_assoc($result2);
@@ -250,16 +257,16 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Add") {
                     <?= htmlspecialchars($salary_error) ?>
                 </p><?php } ?>
             <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control">
+                <label class="form-label">Salary</label>
+                <input type="number" name="salary" class="form-control">
             </div>
             <?php if(!empty($password_error)){ ?>
                 <p class="text-danger text-start">
                     <?= htmlspecialchars($password_error) ?>
                 </p><?php } ?>
             <div class="mb-3">
-                <label class="form-label">Salary</label>
-                <input type="number" name="salary" class="form-control">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control">
             </div>
             <div class="mb-3">
                 <button type="submit" name="submit" value="Add" class="btn btn-primary w-100">Add employee</button>
