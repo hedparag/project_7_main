@@ -8,6 +8,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="edit_employee.php">Edit Profile</a></li>
+                <li><a class="dropdown-item" href="change_password.php">Change Password</a></li>
                 <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
             </ul>
         </div>
