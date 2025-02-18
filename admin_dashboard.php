@@ -67,9 +67,9 @@ if (!$result) {
                             $row3 = pg_fetch_assoc($result3);
                         ?>
                         <td class="text-center"><?= htmlspecialchars($row3['position_name']) ?></td>
-                        <td class="text-center"><?= htmlspecialchars($row['employee_name']) ?></td>
-                        <td class="text-center"><?= htmlspecialchars($row['employee_email']) ?></td>
-                        <td class="text-center"><?= htmlspecialchars($row['employee_phone']) ?></td>
+                        <td class="text-center"><?= htmlspecialchars($row['employee_name'], ENT_QUOTES, 'UTF-8') ?></td>
+                        <td class="text-center"><?= htmlspecialchars($row['employee_email'], ENT_QUOTES, 'UTF-8') ?></td>
+                        <td class="text-center"><?= htmlspecialchars($row['employee_phone'], ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
                             <a href="view_employee.php?id=<?= $row['employee_id'] ?>" class="btn btn-success btn-sm">View Details</a>
                         </td>

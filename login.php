@@ -2,14 +2,21 @@
 require('include/config.php');
 session_start();
 
-error_reporting(0);
-ini_set('display_errors', 0);
-
 $toastMessage = "";
 $toastType = "";
 $is_error = false;
 
-if (isset($_POST['submit']) && $_POST['submit'] == "Login") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit']) && $_POST['submit'] == "Login") {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        echo "<script>
+            alert('CSRF token validation failed! Possible attack detected.');
+            window.location.href = 'login.php';
+          </script>";
+        exit();
+    }
+
+    $_SESSION['csrf_token'] = md5(uniqid(rand(), true));
+
     $empname = pg_escape_string($conn, stripslashes($_POST['empname']));
     $emppass = pg_escape_string($conn, stripslashes($_POST['password']));
     
@@ -30,14 +37,16 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Login") {
         if (pg_num_rows($result) == 1) {
             $row = pg_fetch_assoc($result);
             $hashed_password = $row['password'];
-    
+   
             if(password_verify($emppass, $hashed_password)) {
-                $_SESSION['user_full_name'] = $row['full_name'];
+                $_SESSION['user_full_name'] = htmlspecialchars($row['full_name'], ENT_QUOTES, 'UTF-8');
                 $_SESSION['userid'] = $row['user_id'];
+                unset($_SESSION['csrf_token']);
+
                 $query2 = "UPDATE users SET last_login_time = NOW() WHERE user_id = $1;";
                 $result2 = pg_query_params($conn, $query2, [$row['user_id']]) or die("Query Failed: " . pg_last_error($conn));
                 $uid = $row['user_type_id'];
-                echo $query3 = "SELECT status FROM user_types WHERE user_type_id = $uid;";
+                $query3 = "SELECT status FROM user_types WHERE user_type_id = $uid;";
                 $result3 = pg_query($conn,$query3)  or die("Query Failed: " . pg_last_error($conn));
                 $row3 = pg_fetch_assoc($result3);
                 $status = $row3['status'];
@@ -75,7 +84,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Login") {
 <body class="bg-secondary">
 <div class="container d-flex justify-content-center align-items-center min-vh-100"> 
     <div class="col-lg-4 col-md-6 col-sm-8"> 
-        <form method="POST" enctype="multipart/form-data" name="login" class="p-4 border rounded bg-light shadow text-center" novalidate>
+        <form method="POST" name="login" class="p-4 border rounded bg-light shadow text-center" novalidate>
             <div class="text-dark mb-3">
                 <h2 class="text-dark bg-white p-2 rounded w-100">Login Page</h2>
             </div>
@@ -96,6 +105,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == "Login") {
                 <input type="password" class="form-control" name="password" 
                 value="<?= isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '' ?>" placeholder="Password"/>
             </div>
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <div class="mb-3">
                 <button type="submit" name="submit" value="Login" class="btn btn-primary w-100">Submit</button>
             </div>

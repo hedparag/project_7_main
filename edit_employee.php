@@ -49,23 +49,23 @@ if (isset($_POST['update']) && $_POST['update'] == "Update") {
             <input type="hidden" name="empid" value="<?= htmlspecialchars($employee['employee_id']) ?>">
             <div class="mb-3">
                 <label class="form-label">Employee Name</label>
-                <input type="text" name="empname" class="form-control" value="<?= htmlspecialchars($employee['employee_name']) ?>" required>
+                <input type="text" name="empname" class="form-control" value="<?= htmlspecialchars($employee['employee_name'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Employee Email</label>
-                <input type="email" name="empmail" class="form-control" value="<?= htmlspecialchars($employee['employee_email']) ?>" required>
+                <input type="email" name="empmail" class="form-control" value="<?= htmlspecialchars($employee['employee_email'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="tel" name="empphn" class="form-control" value="<?= htmlspecialchars($employee['employee_phone']) ?>" required>
+                <input type="tel" name="empphn" class="form-control" value="<?= htmlspecialchars($employee['employee_phone'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Details</label>
-                <input type="text" name="empdetails" class="form-control" value="<?= htmlspecialchars($employee['employee_details']) ?>" required>
+                <input type="text" name="empdetails" class="form-control" value="<?= htmlspecialchars($employee['employee_details'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Skills</label>
-                <input type="text" name="skills" class="form-control" value="<?= htmlspecialchars($employee['employee_skils']) ?>" required>
+                <input type="text" name="skills" class="form-control" value="<?= htmlspecialchars($employee['employee_skils'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <input type="submit" name="update" class="form-control btn btn-success" value="Update" required>

@@ -7,7 +7,15 @@ if(!(isset($_SESSION['user_full_name']) && isset($_SESSION['userid']))){
 }
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die("Invalid Employee ID.");
+    die("Employee ID is not provided.");
+}
+
+$id = "";
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    if(!ctype_digit($id)){
+        die("Invalid Employee ID.");
+    }
 }
 
 $empId = intval($_GET['id']);
@@ -83,7 +91,7 @@ if (isset($_POST['reject']) && $_POST['reject'] == "Reject") {
             <input type="hidden" name="empid" value="<?= htmlspecialchars($employee['employee_id']) ?>">
             <div class="mb-3">
                 <label class="form-label">Employee Name</label>
-                <input type="text" name="empname" class="form-control" value="<?= htmlspecialchars($employee['employee_name']) ?>" required>
+                <input type="text" name="empname" class="form-control" value="<?= htmlspecialchars($employee['employee_name'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
 
             <div class="mb-3">
@@ -130,21 +138,21 @@ if (isset($_POST['reject']) && $_POST['reject'] == "Reject") {
             </div>
             <div class="mb-3">
                 <label class="form-label">Employee Email</label>
-                <input type="email" name="empmail" class="form-control" value="<?= htmlspecialchars($employee['employee_email']) ?>" required>
+                <input type="email" name="empmail" class="form-control" value="<?= htmlspecialchars($employee['employee_email'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="tel" name="empphn" class="form-control" value="<?= htmlspecialchars($employee['employee_phone']) ?>" required>
+                <input type="tel" name="empphn" class="form-control" value="<?= htmlspecialchars($employee['employee_phone'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Details</label>
-                <input type="text" name="empdetails" class="form-control" value="<?= htmlspecialchars($employee['employee_details']) ?>" required>
+                <input type="text" name="empdetails" class="form-control" value="<?= htmlspecialchars($employee['employee_details'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Skills</label>
-                <input type="text" name="skills" class="form-control" value="<?= htmlspecialchars($employee['employee_skils']) ?>" required>
+                <input type="text" name="skills" class="form-control" value="<?= htmlspecialchars($employee['employee_skils'], ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
