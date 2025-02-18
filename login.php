@@ -1,7 +1,11 @@
 <?php
-require('include/config.php');
+if (!isset($conn)) {
+    require('include/config.php');
+}
 session_start();
-
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = md5(uniqid(rand(), true));
+}
 $toastMessage = "";
 $toastType = "";
 $is_error = false;
@@ -88,10 +92,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit']) && $_POST['
             <div class="text-dark mb-3">
                 <h2 class="text-dark bg-white p-2 rounded w-100">Login Page</h2>
             </div>
-            <?php if(!empty($name_error)){ ?>
+            <?php if (!empty($name_error)) { ?>
                 <p class="text-danger text-start">
                     <?= htmlspecialchars($name_error) ?>
-            </p><?php } ?>
+                </p>    
+            <?php } ?>
             <div class="mb-3">
             <input type="text" class="form-control" name="empname" 
                 value="<?= isset($_POST['empname']) ? htmlspecialchars($_POST['empname']) : '' ?>" 
@@ -100,7 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit']) && $_POST['
             <?php if(!empty($password_error)){ ?>
                 <p class="text-danger text-start">
                     <?= htmlspecialchars($password_error) ?>
-                </p><?php } ?>
+                </p>
+            <?php } ?>
             <div class="mb-3">
                 <input type="password" class="form-control" name="password" 
                 value="<?= isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '' ?>" placeholder="Password"/>
